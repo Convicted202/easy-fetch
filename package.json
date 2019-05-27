@@ -1,0 +1,36 @@
+{
+  "name": "easy-fetch",
+  "version": "0.0.1",
+  "description": "",
+  "main": "dist/index.js",
+  "module": "dist/index.es.js",
+  "files": [
+    "dist"
+  ],
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "start": "npm run build",
+    "prebuild": "rimraf dist",
+    "build": "tsc -p . && rollup -c"
+  },
+  "keywords": [
+    "fetch",
+    "api",
+    "wrapper"
+  ],
+  "author": "convicted202",
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/core": "^7.4.5",
+    "@babel/preset-env": "^7.4.5",
+    "@eleks/eslint-config-eleks": "^0.2.1",
+    "babel-eslint": "^10.0.1",
+    "eslint": "^5.16.0",
+    "husky": "^2.3.0",
+    "lint-staged": "^8.1.7",
+    "rimraf": "^2.6.3",
+    "rollup": "^1.12.4",
+    "rollup-plugin-typescript2": "^0.21.1",
+    "typescript": "^3.4.5"
+  }
+}
