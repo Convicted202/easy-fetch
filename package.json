@@ -10,8 +10,25 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "start": "npm run build",
-    "prebuild": "rimraf dist",
+    "lint": "eslint src --ext .ts --color --",
+    "prebuild": "npm run lint && rimraf dist",
     "build": "tsc -p . && rollup -c"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "ignore": [
+      "dist/**"
+    ],
+    "linters": {
+      "*.{js,jsx}": [
+        "npm run lint --fix",
+        "git add"
+      ]
+    }
   },
   "keywords": [
     "fetch",
@@ -21,13 +38,15 @@
   "author": "convicted202",
   "license": "MIT",
   "devDependencies": {
-    "@babel/core": "^7.4.5",
-    "@babel/preset-env": "^7.4.5",
     "@eleks/eslint-config-eleks": "^0.2.1",
-    "babel-eslint": "^10.0.1",
+    "@typescript-eslint/eslint-plugin": "^1.9.0",
+    "@typescript-eslint/parser": "^1.9.0",
     "eslint": "^5.16.0",
+    "eslint-config-prettier": "^4.3.0",
+    "eslint-plugin-prettier": "^3.1.0",
     "husky": "^2.3.0",
     "lint-staged": "^8.1.7",
+    "prettier": "^1.17.1",
     "rimraf": "^2.6.3",
     "rollup": "^1.12.4",
     "rollup-plugin-typescript2": "^0.21.1",
