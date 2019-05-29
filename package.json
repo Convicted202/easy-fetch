@@ -12,7 +12,8 @@
     "start": "npm run build",
     "lint": "eslint src --ext .ts --color --",
     "prebuild": "npm run lint && rimraf dist",
-    "build": "tsc -p . && rollup -c"
+    "build": "tsc -p . && rollup -c",
+    "test": "jest"
   },
   "husky": {
     "hooks": {
@@ -39,17 +40,24 @@
   "license": "MIT",
   "devDependencies": {
     "@eleks/eslint-config-eleks": "^0.2.1",
+    "@types/jest": "^24.0.13",
+    "@types/nock": "^10.0.3",
+    "@types/node-fetch": "^2.3.4",
     "@typescript-eslint/eslint-plugin": "^1.9.0",
     "@typescript-eslint/parser": "^1.9.0",
     "eslint": "^5.16.0",
     "eslint-config-prettier": "^4.3.0",
     "eslint-plugin-prettier": "^3.1.0",
     "husky": "^2.3.0",
+    "jest": "^24.8.0",
     "lint-staged": "^8.1.7",
+    "nock": "^10.0.6",
+    "node-fetch": "^2.6.0",
     "prettier": "^1.17.1",
     "rimraf": "^2.6.3",
     "rollup": "^1.12.4",
     "rollup-plugin-typescript2": "^0.21.1",
+    "ts-jest": "^24.0.2",
     "typescript": "^3.4.5"
   }
 }
