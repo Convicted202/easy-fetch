@@ -1,6 +1,6 @@
 version: 2
 jobs:
-  checkout:
+  clone:
     docker:
       - image: circleci/node:lts
     working_directory: /tmp
@@ -39,10 +39,10 @@ workflows:
   version: 2
   test-build:
     jobs:
-      - checkout
+      - clone
       - test:
         requires: 
-          - checkout
+          - clone
       - build:
         requires:
-          - test
+          - clone
