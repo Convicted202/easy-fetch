@@ -6,6 +6,10 @@ jobs:
     working_directory: ~/app-container
     steps:
       - checkout
+      - save_cache: # saving initial checkout version to work with in next jobs
+          key: v1-repo-{{ .Environment.CIRCLE_SHA1 }}
+          paths:
+            - ~/circleci-demo-workflows
       - run:
           name: Update npm
           command: 'sudo npm install -g npm@latest'
@@ -14,7 +18,7 @@ jobs:
       - run:
           name: Install deps
           command: npm install
-      - save_cache:
+      - save_cache: # saving installed dependencies to new cache
           key: dependency-cache-{{ checksum "package.json" }}
           paths:
             - ./node_modules
@@ -23,6 +27,8 @@ jobs:
       - image: circleci/node:lts
     working_directory: ~/app-container
     steps:
+      - restore_cache:
+          key: v1-repo-{{ .Environment.CIRCLE_SHA1 }}
       - restore_cache:
           key: dependency-cache-{{ checksum "package.json" }}
       - run: 
@@ -37,12 +43,14 @@ jobs:
     working_directory: ~/app-container
     steps:
       - restore_cache:
+          key: v1-repo-{{ .Environment.CIRCLE_SHA1 }}
+      - restore_cache:
           key: dependency-cache-{{ checksum "package.json" }}
       - run:
           name: Build artifact
           command: npm run build
       - store_artifacts:
-          path: ~/app-container/easy-fetch
+          path: ~/app-container/easy-fetch/dist
           destination: artifact
 
 workflows:
