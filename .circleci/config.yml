@@ -40,7 +40,7 @@ workflows:
   test-build:
     jobs:
       - checkout
-      - test
+      - test:
         requires: 
           - checkout
       - build:
