@@ -1,0 +1,48 @@
+version: 2
+jobs:
+  checkout:
+    docker:
+      - image: circleci/node:lts
+    working_directory: /tmp
+    steps:
+      - checkout
+      - save_cache:
+          key: v1-repo-{{ .Environment.CIRCLE_SHA1 }}
+          paths:
+            - ~/circleci-workflows
+  test:
+    docker:
+      - image: circleci/node:lts
+    steps:
+      - restore_cache:
+        key: v1-repo-{{ .Environment.CIRCLE_SHA1 }}
+      - run: 
+        name: Running linter
+        command: npm run lint
+      - run:
+        name: Running tests
+        command: npm run test
+  build:
+    docker:
+      - image: circleci/node:lts
+    steps:
+      - restore_cache:
+        key: v1-repo-{{ .Environment.CIRCLE_SHA1 }}
+      - run:
+        name: Build artifact
+        command: npm run build
+      - store_artifacts:
+          path: /tmp/easy-fetch
+          destination: artifact
+
+workflows:
+  version: 2
+  name: test-build
+    jobs:
+      - checkout
+      - test
+        requires: 
+          - checkout
+      - build:
+        requires:
+          - test
