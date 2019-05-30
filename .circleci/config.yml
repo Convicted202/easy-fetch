@@ -37,7 +37,7 @@ jobs:
 
 workflows:
   version: 2
-  name: test-build
+  test-build:
     jobs:
       - checkout
       - test
