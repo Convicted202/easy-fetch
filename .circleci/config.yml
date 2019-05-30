@@ -1,48 +1,58 @@
 version: 2
 jobs:
-  clone:
+  prepare:
     docker:
       - image: circleci/node:lts
-    working_directory: /tmp
+    working_directory: ~/app-container
     steps:
       - checkout
+      - run:
+          name: Update npm
+          command: 'sudo npm install -g npm@latest'
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+      - run:
+          name: Install deps
+          command: npm install
       - save_cache:
-          key: v1-repo-{{ .Environment.CIRCLE_SHA1 }}
+          key: dependency-cache-{{ checksum "package.json" }}
           paths:
-            - ~/circleci-workflows
+            - ./node_modules
   test:
     docker:
       - image: circleci/node:lts
+    working_directory: ~/app-container
     steps:
       - restore_cache:
-        key: v1-repo-{{ .Environment.CIRCLE_SHA1 }}
+          key: dependency-cache-{{ checksum "package.json" }}
       - run: 
-        name: Running linter
-        command: npm run lint
+          name: Running linter
+          command: npm run lint
       - run:
-        name: Running tests
-        command: npm run test
+          name: Running tests
+          command: npm run test
   build:
     docker:
       - image: circleci/node:lts
+    working_directory: ~/app-container
     steps:
       - restore_cache:
-        key: v1-repo-{{ .Environment.CIRCLE_SHA1 }}
+          key: dependency-cache-{{ checksum "package.json" }}
       - run:
-        name: Build artifact
-        command: npm run build
+          name: Build artifact
+          command: npm run build
       - store_artifacts:
-          path: /tmp/easy-fetch
+          path: ~/app-container/easy-fetch
           destination: artifact
 
 workflows:
   version: 2
   test-build:
     jobs:
-      - clone
+      - prepare
       - test:
-        requires: 
-          - clone
+          requires:
+            - prepare
       - build:
-        requires:
-          - clone
+          requires:
+            - test
