@@ -50,7 +50,7 @@ jobs:
           name: Build artifact
           command: npm run build
       - store_artifacts:
-          path: ~/app-container/easy-fetch/dist
+          path: ~/app-container/dist
           destination: artifact
 
 workflows:
